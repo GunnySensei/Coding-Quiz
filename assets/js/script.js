@@ -4,7 +4,7 @@ var nextBtn = document.querySelector("#next");
 var secondsLeft = 45;
 var time = 45;
 var quizStatus = false;
-var currentQuestion = questions.number;
+var questionCount = -1;
 var questions = [
     { 
         number: 1,
@@ -88,9 +88,9 @@ function endQuiz() {
 }
 
 function getNextQuestion() {
-    for(var i = currentQuestion; i > questions.length; i ++) {
-        console.log(currentQuestion);
-    }
+    questionCount++;
+    var currentQuestion = questions[questionCount];
+    console.log(currentQuestion);
 }
 
 
