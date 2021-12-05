@@ -15,6 +15,12 @@ var answerChoices= [];
 var trueAnswers = [];
 var questionCount = 0;
 var currentNumber = 0;
+var savedGames = [
+    {
+        name: "" ,
+        finalScore: 0
+    }
+];
 var questions = [
     { 
         number: "question-1",
@@ -109,7 +115,8 @@ function endQuiz() {
 
     document.getElementById("timer").hidden = true;
     clearInterval(time);
-    clearInterval(countdaown);
+    clearInterval(countdown);
+
 
     var quizQuestions = document.getElementById("question")
     quizQuestions.remove();
@@ -176,7 +183,7 @@ function getNextQuestion() {
     return answerChoices;
 }
 
-var getAnswers = function () {
+function getanswers() {
     for(var i = 0; i < 5; i++) {
         var correctAnswers = questions[i].answer;
         trueAnswers.push(correctAnswers);
@@ -184,7 +191,7 @@ var getAnswers = function () {
     return trueAnswers;
 }
 
-var answerChoice = function() {
+function answerChoice() {
     console.log(answerChoices);
     //select ID of the answers
     var finalAnswerA = document.querySelector("#answer-0");
@@ -198,7 +205,7 @@ var answerChoice = function() {
     finalAnswerD.addEventListener("click", finalAnswer);
 }
 
-var finalAnswer = function() {
+function finalAnswer() {
     var confirmedAnswer = this.id;
     console.log(confirmedAnswer);
     console.log(trueAnswers[questionCount]);
@@ -225,6 +232,7 @@ var finalAnswer = function() {
     }
  
 }
+
 
 getAnswers();
 startBtn.addEventListener("click",startQuiz);
