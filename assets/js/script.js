@@ -140,8 +140,6 @@ function noMoreQuestionsEnd() {
     scoreCard.appendChild(endingMessage);
 }
 
-//need to create elements outside of loop and then set values within loop
-
 function getNextQuestion() {
     //variable to show current question within the array
     var currentQuestion = questions[questionCount];
