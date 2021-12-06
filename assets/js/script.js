@@ -4,6 +4,7 @@ var nextBtn = document.querySelector("#next");
 var scoreCard = document.querySelector("#score");
 var timer = document.querySelector("#timer");
 var quiz = document.querySelector("#quiz");
+var highscore = document.querySelector("#highscores");
 
 //variables declarations
 var secondsLeft = 45;
@@ -15,12 +16,7 @@ var answerChoices= [];
 var trueAnswers = [];
 var questionCount = 0;
 var currentNumber = 0;
-var savedGames = [
-    {
-        name: "" ,
-        finalScore: 0
-    }
-];
+var savedGames = [];
 var questions = [
     { 
         number: "question-1",
@@ -117,6 +113,7 @@ function endQuiz() {
     clearInterval(time);
     clearInterval(countdown);
 
+    saveGame();
 
     var quizQuestions = document.getElementById("question")
     quizQuestions.remove();
@@ -135,6 +132,8 @@ function noMoreQuestionsEnd() {
 
     nextBtn.hidden = true;
     endBtn.hidden = true;
+
+    saveGame();
 
     document.getElementById("timer").hidden = true;
     clearInterval(time);
@@ -183,7 +182,7 @@ function getNextQuestion() {
     return answerChoices;
 }
 
-function getanswers() {
+var getAnswers = function() {
     for(var i = 0; i < 5; i++) {
         var correctAnswers = questions[i].answer;
         trueAnswers.push(correctAnswers);
@@ -233,8 +232,35 @@ function finalAnswer() {
  
 }
 
+function saveGame() {
+    var playerName = window.prompt("Please enter your name")
+    savedGames.push(["Name: " + playerName, "  Score: " + score])
+    console.log(savedGames);
+    localStorage.setItem("savedGamesStorage", JSON.stringify(savedGames));
+}
 
+function viewScores() {
+    var savedGamesData = localStorage.getItem("savedGamesStorage");
+
+    if(!savedGamesData)
+    {
+        return false;
+    }
+
+    console.log("Found saved data");
+
+    savedGamesData = JSON.parse(savedGamesData);
+
+    for(var i = 0; i < savedGamesData.length; i++) {
+        var savedData = document.createElement("div");
+        savedData.id = "saved-data";
+        savedData.textContent = savedGamesData[i];
+        document.getElementById("quiz").appendChild(savedData);
+
+    }
+}
 getAnswers();
 startBtn.addEventListener("click",startQuiz);
 endBtn.addEventListener("click", endQuiz);
 nextBtn.addEventListener("click", getNextQuestion);
+highscore.addEventListener("click", viewScores);
