@@ -213,6 +213,7 @@ function finalAnswer() {
     }
     else{
         alert("Wrong Answer");
+        secondsLeft = secondsLeft - 5;
     }
     
     var el = document.getElementById("question");
