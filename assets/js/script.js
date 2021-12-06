@@ -1,6 +1,5 @@
 var startBtn = document.querySelector("#start");
 var endBtn = document.querySelector("#end");
-var nextBtn = document.querySelector("#next");
 var scoreCard = document.querySelector("#score");
 var timer = document.querySelector("#timer");
 var quiz = document.querySelector("#quiz");
@@ -83,10 +82,17 @@ function startQuiz() {
     score = 0;
     quizStatus = true;
     endBtn.hidden = false;
-    nextBtn.hidden = false;
     timer.hidden = false;
     scoreCard.hidden = false;
     quiz.hidden = false;
+
+
+    var highscoreData = document.getElementById("saved");
+    if(highscoreData) {
+        highscoreData.remove();
+    }
+
+
     scoreCard.textContent = "Score: " + score;
     console.log("Quiz has Begun, current time is: " + secondsLeft);
     time = setInterval(function(){
@@ -106,7 +112,6 @@ function endQuiz() {
     questionCount = 0;
     currentNumber = 0;
 
-    nextBtn.hidden = true;
     endBtn.hidden = true;
 
     document.getElementById("timer").hidden = true;
@@ -130,7 +135,6 @@ function noMoreQuestionsEnd() {
     questionCount = 0;
     currentNumber = 0;
 
-    nextBtn.hidden = true;
     endBtn.hidden = true;
 
     saveGame();
@@ -147,9 +151,6 @@ function noMoreQuestionsEnd() {
 }
 
 function getNextQuestion() {
-    //variable to show current question within the array
-    var currentQuestion = questions[questionCount];
-    console.log(currentQuestion);
     //access the quiz section in HTML
     var questionArticle = document.getElementById("quiz");
     //create a section populating from the question portion of the array
@@ -191,7 +192,6 @@ var getAnswers = function() {
 }
 
 function answerChoice() {
-    console.log(answerChoices);
     //select ID of the answers
     var finalAnswerA = document.querySelector("#answer-0");
     var finalAnswerB = document.querySelector("#answer-1");
@@ -206,8 +206,6 @@ function answerChoice() {
 
 function finalAnswer() {
     var confirmedAnswer = this.id;
-    console.log(confirmedAnswer);
-    console.log(trueAnswers[questionCount]);
     if(confirmedAnswer === trueAnswers[questionCount]) {
         alert("Correct Answer");
         score = score + 100;
@@ -222,7 +220,6 @@ function finalAnswer() {
     answerChoices = [];
     questionCount++;
     currentNumber++;
-    console.log(currentNumber);
     if(currentNumber === 5) {
         noMoreQuestionsEnd();
     }
@@ -235,7 +232,6 @@ function finalAnswer() {
 function saveGame() {
     var playerName = window.prompt("Please enter your name")
     savedGames.push(["Name: " + playerName, "  Score: " + score])
-    console.log(savedGames);
     localStorage.setItem("savedGamesStorage", JSON.stringify(savedGames));
 }
 
@@ -251,16 +247,18 @@ function viewScores() {
 
     savedGamesData = JSON.parse(savedGamesData);
 
-    for(var i = 0; i < savedGamesData.length; i++) {
-        var savedData = document.createElement("div");
-        savedData.id = "saved-data";
-        savedData.textContent = savedGamesData[i];
-        document.getElementById("quiz").appendChild(savedData);
+    var savedData = document.createElement("ul");
+    savedData.id = "saved";
+    savedData.className = "saved";
+    document.getElementById("quiz").appendChild(savedData);
 
+    for(var i = 0; i < savedGamesData.length; i++) {
+        var savedDataEntries = document.createElement("li");
+        savedDataEntries.textContent = savedGamesData[i];
+        savedData.appendChild(savedDataEntries);
     }
 }
 getAnswers();
 startBtn.addEventListener("click",startQuiz);
 endBtn.addEventListener("click", endQuiz);
-nextBtn.addEventListener("click", getNextQuestion);
 highscore.addEventListener("click", viewScores);
